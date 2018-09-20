@@ -113,5 +113,19 @@ func TestParse(t *testing.T) {
 			So(args[6], ShouldEqual, `copy`)
 			So(args[7], ShouldEqual, `c:\path to my dir`)
 		})
+
+		Convey("With non-ACSII ending args", func() {
+			tmpLine = `psexec   \\machine   -u MYDOMAIN\myuser    测试字符串`
+
+			args, err = Parse(tmpLine)
+			So(err, ShouldBeNil)
+			So(len(args), ShouldEqual, 5)
+
+			So(args[0], ShouldEqual, `psexec`)
+			So(args[1], ShouldEqual, `\\machine`)
+			So(args[2], ShouldEqual, `-u`)
+			So(args[3], ShouldEqual, `MYDOMAIN\myuser`)
+			So(args[4], ShouldEqual, `测试字符串`)
+		})
 	})
 }
